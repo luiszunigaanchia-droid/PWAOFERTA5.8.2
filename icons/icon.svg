@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Preanalítica">
+  <rect width="512" height="512" rx="104" fill="#0b5d52"/>
+  <path d="M201 88h110M218 88v133L130 385a46 46 0 0 0 40 68h172a46 46 0 0 0 40-68l-88-164V88" fill="none" stroke="#f3faf7" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M174 342h164" fill="none" stroke="#d98e2b" stroke-width="24" stroke-linecap="round"/>
+  <circle cx="230" cy="295" r="15" fill="#d98e2b"/>
+  <circle cx="280" cy="318" r="10" fill="#f3faf7"/>
+</svg>

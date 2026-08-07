@@ -1,0 +1,121 @@
+{
+  "version": "2026.1",
+  "fechaGeneracion": "2026-08-05T07:43:52.961052",
+  "totalPruebas": 623,
+  "totalClasificadas": 623,
+  "totalPendientes": 0,
+  "porcentajeAvance": 100.0,
+  "estadisticasPorTipo": {
+    "hsjd": 473,
+    "todos_ccss": 103,
+    "centros_especificos": 8,
+    "condicionada": 39,
+    "pendiente": 0
+  },
+  "estadisticasPorSeccion": {
+    "Banco de Sangre": {
+      "total": 15,
+      "clasificadas": 15,
+      "pendientes": 0,
+      "por_tipo": {
+        "hsjd": 12,
+        "todos_ccss": 3,
+        "centros_especificos": 0,
+        "condicionada": 0,
+        "pendiente": 0
+      },
+      "revisadas": 15
+    },
+    "Biología Molecular": {
+      "total": 27,
+      "clasificadas": 27,
+      "pendientes": 0,
+      "por_tipo": {
+        "hsjd": 9,
+        "todos_ccss": 10,
+        "centros_especificos": 0,
+        "condicionada": 8,
+        "pendiente": 0
+      },
+      "revisadas": 27
+    },
+    "Hematología": {
+      "total": 76,
+      "clasificadas": 76,
+      "pendientes": 0,
+      "por_tipo": {
+        "hsjd": 67,
+        "todos_ccss": 4,
+        "centros_especificos": 2,
+        "condicionada": 3,
+        "pendiente": 0
+      },
+      "revisadas": 76
+    },
+    "Hormonas y Marcadores Tumorales": {
+      "total": 212,
+      "clasificadas": 212,
+      "pendientes": 0,
+      "por_tipo": {
+        "hsjd": 187,
+        "todos_ccss": 25,
+        "centros_especificos": 0,
+        "condicionada": 0,
+        "pendiente": 0
+      },
+      "revisadas": 212
+    },
+    "Inmunología": {
+      "total": 147,
+      "clasificadas": 147,
+      "pendientes": 0,
+      "por_tipo": {
+        "hsjd": 80,
+        "todos_ccss": 54,
+        "centros_especificos": 4,
+        "condicionada": 9,
+        "pendiente": 0
+      },
+      "revisadas": 147
+    },
+    "Laboratorio Emergencias": {
+      "total": 8,
+      "clasificadas": 8,
+      "pendientes": 0,
+      "por_tipo": {
+        "hsjd": 6,
+        "todos_ccss": 0,
+        "centros_especificos": 2,
+        "condicionada": 0,
+        "pendiente": 0
+      },
+      "revisadas": 8
+    },
+    "Microbiología": {
+      "total": 51,
+      "clasificadas": 51,
+      "pendientes": 0,
+      "por_tipo": {
+        "hsjd": 34,
+        "todos_ccss": 7,
+        "centros_especificos": 0,
+        "condicionada": 10,
+        "pendiente": 0
+      },
+      "revisadas": 51
+    },
+    "Química Clínica": {
+      "total": 87,
+      "clasificadas": 87,
+      "pendientes": 0,
+      "por_tipo": {
+        "hsjd": 78,
+        "todos_ccss": 0,
+        "centros_especificos": 0,
+        "condicionada": 9,
+        "pendiente": 0
+      },
+      "revisadas": 87
+    }
+  }
+}

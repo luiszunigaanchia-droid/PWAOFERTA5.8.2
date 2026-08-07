@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es-CR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b5d52">
+  <meta name="description" content="Consulta offline de la oferta de análisis y requisitos preanalíticos del laboratorio clínico.">
+  <meta name="color-scheme" content="light">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://raw.githubusercontent.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests">
+  <title>Oferta de Análisis · Preanalítica</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="appbar">
+    <div class="header-row">
+      <div class="brand-block">
+        <p class="eyebrow"><span id="onlineDot" class="status-dot"></span><span id="onlineText">Laboratorio Clínico · Fase preanalítica</span></p>
+        <h1>Oferta de Análisis</h1>
+      </div>
+      <div class="header-actions">
+        <button id="installBtn" class="header-button" type="button" hidden>Instalar</button>
+        <button id="adminButton" class="header-button" type="button" aria-haspopup="dialog">Administrar</button>
+      </div>
+    </div>
+
+    <div class="search-row">
+      <label class="sr-only" for="searchInput">Buscar análisis</label>
+      <span class="search-symbol" aria-hidden="true">⌕</span>
+      <input id="searchInput" type="search" placeholder="Buscar por prueba, código, muestra, perfil o contenido…" autocomplete="off" spellcheck="false">
+      <button id="clearSearchButton" class="clear-search" type="button" aria-label="Limpiar búsqueda" hidden>×</button>
+    </div>
+
+    <div class="center-selector-row">
+      <button id="centerSelectorButton" class="center-selector-btn" type="button" aria-haspopup="dialog">
+        <span class="center-btn-icon" aria-hidden="true">🏥</span>
+        <span id="selectedCenterLabel" class="center-btn-text">Filtrar por Centro de Salud CCSS…</span>
+        <span class="center-btn-arrow" aria-hidden="true">▾</span>
+      </button>
+      <button id="clearCenterFilterButton" class="clear-center-btn" type="button" title="Ver todo el catálogo" hidden>✕ Ver todo</button>
+    </div>
+
+    <div id="divisionChips" class="chips" aria-label="Filtrar por división"></div>
+  </header>
+
+  <div id="updateBanner" class="update-banner" role="status" hidden>
+    <span>Hay una versión nueva disponible.</span>
+    <button id="applyUpdateButton" class="button small primary" type="button">Actualizar</button>
+  </div>
+
+  <main class="main-container">
+    <div id="centerActiveBanner" class="center-active-banner" hidden>
+      <div class="banner-content">
+        <span class="banner-icon" aria-hidden="true">🏥</span>
+        <div>
+          <strong id="centerActiveTitle">Oferta autorizada para centro</strong>
+          <p id="centerActiveSubtitle">Red de Servicios CCSS</p>
+        </div>
+      </div>
+      <button id="resetCenterBannerButton" class="button small secondary" type="button">Restablecer filtro</button>
+    </div>
+
+    <section class="summary-row" aria-label="Resumen del catálogo">
+      <p id="resultCount" class="result-count" aria-live="polite">Cargando catálogo…</p>
+      <button id="expandAllButton" class="text-button" type="button">Expandir visibles</button>
+    </section>
+
+    <section id="catalogNotice" class="notice" hidden>
+      <div>
+        <strong id="catalogNoticeTitle">Catálogo no disponible</strong>
+        <p id="catalogNoticeText">Se necesita conexión una vez para recuperar el catálogo inicial.</p>
+      </div>
+      <button id="retryCatalogButton" class="button primary" type="button">Reintentar</button>
+    </section>
+
+    <section id="testList" class="test-list" aria-label="Oferta de análisis"></section>
+
+    <section id="emptyState" class="empty-state" hidden>
+      <div class="empty-icon" aria-hidden="true">⌕</div>
+      <h2>Sin resultados</h2>
+      <p>Pruebe otro nombre, código, muestra, perfil o división.</p>
+    </section>
+  </main>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <dialog id="pinDialog" class="dialog dialog-small">
+    <form id="pinForm" method="dialog">
+      <div class="dialog-header">
+        <div>
+          <p class="dialog-kicker">Protección local</p>
+          <h2>Modo administrador</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="pinDialog" aria-label="Cerrar">×</button>
+      </div>
+      <p class="dialog-copy">Ingrese el PIN para editar o restaurar el catálogo. El PIN inicial es <strong>1234</strong>.</p>
+      <label for="pinInput">PIN</label>
+      <input id="pinInput" type="password" minlength="4" maxlength="24" autocomplete="current-password" required>
+      <p id="pinError" class="form-error" role="alert" hidden>PIN incorrecto.</p>
+      <div class="dialog-actions">
+        <button class="button secondary" type="button" data-close-dialog="pinDialog">Cancelar</button>
+        <button id="pinSubmitButton" class="button primary" type="submit">Ingresar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="adminDialog" class="dialog dialog-wide dialog-padded">
+    <div class="dialog-header">
+      <div>
+        <p class="dialog-kicker">Administración local</p>
+        <h2>Catálogo y respaldos</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="adminDialog" aria-label="Cerrar">×</button>
+    </div>
+
+    <section class="admin-summary" aria-label="Estado de almacenamiento">
+      <div><span>Registros</span><strong id="adminRecordCount">0</strong></div>
+      <div><span>Origen</span><strong id="adminSource">Local</strong></div>
+      <div><span>Respaldo</span><strong id="adminBackupStatus">Pendiente</strong></div>
+    </section>
+
+    <section class="admin-section">
+      <h3>Editar catálogo</h3>
+      <div class="button-grid">
+        <button id="newTestButton" class="button primary" type="button">Nueva prueba</button>
+        <button id="exportBackupButton" class="button secondary" type="button">Exportar respaldo JSON</button>
+        <button id="importBackupButton" class="button secondary" type="button">Importar respaldo JSON</button>
+        <input id="importBackupInput" type="file" accept="application/json,.json" hidden>
+        <button id="exportCsvButton" class="button secondary" type="button">Exportar catálogo CSV</button>
+        <button id="restoreOfficialButton" class="button warning" type="button">Restaurar catálogo original</button>
+        <button id="storageButton" class="button secondary" type="button">Proteger almacenamiento</button>
+        <button id="auditButton" class="button secondary" type="button">Ver historial de cambios</button>
+      </div>
+      <p class="hint">La restauración del catálogo original reemplaza las ediciones locales. Exporte un respaldo antes de continuar.</p>
+    </section>
+
+    <section class="admin-section">
+      <h3>Cambiar PIN</h3>
+      <form id="changePinForm" class="inline-form">
+        <label class="sr-only" for="newPinInput">Nuevo PIN</label>
+        <input id="newPinInput" type="password" minlength="4" maxlength="24" placeholder="Nuevo PIN" autocomplete="new-password" required>
+        <button class="button secondary" type="submit">Guardar PIN</button>
+      </form>
+      <p class="hint">Es una protección contra cambios accidentales, no un sistema de autenticación institucional.</p>
+    </section>
+
+    <div class="dialog-actions split-actions">
+      <button id="lockAdminButton" class="button danger" type="button">Salir del modo administrador</button>
+      <button class="button secondary" type="button" data-close-dialog="adminDialog">Cerrar</button>
+    </div>
+  </dialog>
+
+  <dialog id="editorDialog" class="dialog dialog-wide">
+    <form id="editorForm">
+      <div class="dialog-header">
+        <div>
+          <p class="dialog-kicker">Ficha preanalítica</p>
+          <h2 id="editorTitle">Nueva prueba</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog="editorDialog" aria-label="Cerrar">×</button>
+      </div>
+
+      <div id="editorFields" class="editor-fields"></div>
+
+      <div class="dialog-actions split-actions">
+        <button id="deleteTestButton" class="button danger" type="button" hidden>Eliminar prueba</button>
+        <div class="action-group">
+          <button class="button secondary" type="button" data-close-dialog="editorDialog">Cancelar</button>
+          <button id="saveTestButton" class="button primary" type="submit">Guardar cambios</button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="auditDialog" class="dialog dialog-wide dialog-padded">
+    <div class="dialog-header">
+      <div>
+        <p class="dialog-kicker">Trazabilidad local</p>
+        <h2>Historial de cambios</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="auditDialog" aria-label="Cerrar">×</button>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>Fecha</th><th>Acción</th><th>Detalle</th></tr></thead>
+        <tbody id="auditTableBody"></tbody>
+      </table>
+    </div>
+    <p id="auditEmpty" class="empty-inline" hidden>No hay cambios administrativos registrados.</p>
+    <div class="dialog-actions"><button class="button secondary" type="button" data-close-dialog="auditDialog">Cerrar</button></div>
+  </dialog>
+
+  <dialog id="centerDialog" class="dialog dialog-wide dialog-padded">
+    <div class="dialog-header">
+      <div>
+        <p class="dialog-kicker">Red de Servicios CCSS</p>
+        <h2>Seleccionar Centro de Salud</h2>
+      </div>
+      <button class="icon-button" type="button" data-close-dialog="centerDialog" aria-label="Cerrar">×</button>
+    </div>
+    <p class="dialog-copy">Consulte las pruebas autorizadas para referencia desde su centro o área de salud hacia el Hospital San Juan de Dios.</p>
+    
+    <div class="center-modal-search">
+      <input id="centerSearchInput" type="search" placeholder="Buscar por nombre o código (ej: Hatillo, Pavas, Max Peralta, AS-ESCAZU)…" autocomplete="off">
+    </div>
+
+    <div class="chips center-filter-chips" aria-label="Filtrar tipo de centro">
+      <button class="chip active" id="filterCenterAll" type="button">Todos los centros</button>
+      <button class="chip" id="filterCenterHsjd" type="button">Área de atracción HSJD</button>
+      <button class="chip" id="filterCenterHospitales" type="button">Hospitales</button>
+      <button class="chip" id="filterCenterAreas" type="button">Áreas de Salud</button>
+    </div>
+
+    <div id="centerListGrid" class="center-list-grid" role="list"></div>
+
+    <div class="dialog-actions split-actions">
+      <button id="resetCenterFilterDialogBtn" class="button secondary" type="button">Ver catálogo general (Sin filtro)</button>
+      <button class="button secondary" type="button" data-close-dialog="centerDialog">Cerrar</button>
+    </div>
+  </dialog>
+
+  <script src="./js/db.js"></script>
+  <script src="./js/catalog.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>
