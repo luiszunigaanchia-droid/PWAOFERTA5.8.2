@@ -1,8 +1,9 @@
 'use strict';
 
-const CACHE_PREFIX = 'ofertanalisis-preanalitica-';
+const CACHE_PREFIX = 'pwaoferta582-preanalitica-';
 const CACHE_NAME = `${CACHE_PREFIX}v6.1.0`;
 const LEGACY_CACHES = new Set(['preanalitica-v1']);
+const SCOPE_PATH = new URL(self.registration.scope).pathname;
 const APP_SHELL = [
   './',
   './index.html',
@@ -43,7 +44,7 @@ self.addEventListener('fetch', (event) => {
   const request = event.request;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
-  if (url.origin !== self.location.origin) return;
+  if (url.origin !== self.location.origin || !url.pathname.startsWith(SCOPE_PATH)) return;
 
   if (request.mode === 'navigate') {
     event.respondWith((async () => {
